@@ -1,0 +1,1 @@
+insert into test_users values("2", "s2");
