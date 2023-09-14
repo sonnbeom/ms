@@ -1,6 +1,0 @@
-
-CREATE TABLE IF NOT EXISTS test_users (
-	id VARCHAR(255) PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
