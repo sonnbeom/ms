@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <!-- 추가적인 스타일링을 위한 CSS 파일 링크를 여기에 추가할 수 있습니다. -->
+    <style>
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        .signup-form {
+            text-align: center;
+        }
+
+        .signup-box {
+            width: 300px;
+            border: 1px solid #ccc;
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: none; /* 라벨 숨기기 */
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 5px;
+            margin-bottom: 10px;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0070c1;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* 왼쪽 상단 MS 스타일링 */
+        .ms-logo {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="ms-logo">MS</div>
+
+    <div class="signup-form">
+        <div class="signup-box">
+            <form action="/user/new" method="post">
+                <div class="form-group">
+                    <!-- 라벨 없이 입력 필드만 표시 -->
+                    <input type="text" id="username" name="id" th:required="required" placeholder="아이디를 입력하세요">
+                </div>
+
+                <div class="form-group">
+                    <!-- 라벨 없이 입력 필드만 표시 -->
+                    <input type="password" id="password" name="pwd" th:required="required" placeholder="비밀번호를 입력하세요">
+                </div>
+
+                <div class="form-group">
+                    <input type="text" id="name" name="name" th:required="required" placeholder="이름을 입력하세요">
+                </div>
+
+                <div class="form-group">
+                    <input type="email" id="email" name="email" th:required="required" placeholder="이메일을 입력하세요">
+                </div>
+
+                <div class="form-group">
+                    <input type="tel" id="phone" name="phone" th:required="required" placeholder="핸드폰 번호를 입력하세요">
+                </div>
+
+                <button type="submit" class="submit-button">가입하기</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
