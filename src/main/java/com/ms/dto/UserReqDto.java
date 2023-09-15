@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 @Data
-public class UserDto {
+public class UserReqDto {
     @NotNull(message = "아이디를 입력해주세요.")
     private String id;
     

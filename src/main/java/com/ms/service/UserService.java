@@ -1,8 +1,10 @@
 package com.ms.service;
 
 
-import com.ms.dto.UserDto;
+import com.ms.dto.ResDto;
+import com.ms.dto.UserReqDto;
+import com.ms.dto.UserResDto;
 
 public interface UserService {
-    void save(UserDto user);
+    ResDto<UserResDto> save(UserReqDto user);
 }

@@ -1,6 +1,8 @@
 package com.ms.service;
 
-import com.ms.dto.UserDto;
+import com.ms.dto.ResDto;
+import com.ms.dto.UserReqDto;
+import com.ms.dto.UserResDto;
 import com.ms.model.User;
 import com.ms.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -18,15 +20,27 @@ public class UserServiceImpl implements UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public void save(UserDto dto) {
+    public ResDto<UserResDto> save(UserReqDto dto) {
 
-        UserDto encryptedDto = encryptPassword(dto);
-        User user = UserConverter.fromUserDto(encryptedDto);
+        UserReqDto encryptedDto = encryptPassword(dto);
+        User user = UserConverter.UserDtoToUser(encryptedDto);
 
-//      userRepository.save(user);
+
+        ResDto<UserResDto> result = new ResDto<>();
+        try {
+            User savedUser = userRepository.save(user);
+            UserResDto resDto = UserConverter.UserToUserResDto(savedUser);
+            result.setData(resDto);
+        } catch (Exception ex) {
+            log.error("/userservice/save: error >> " + ex);
+            String message = ex.getMessage();
+            result.setErrorMsg(message);
+        }
+
+        return result;
     }
 
-    private UserDto encryptPassword(UserDto dto) {
+    private UserReqDto encryptPassword(UserReqDto dto) {
         dto.setPassword(passwordEncoder.encode(dto.getPassword()));
         return dto;
     }
