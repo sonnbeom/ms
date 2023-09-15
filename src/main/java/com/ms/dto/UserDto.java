@@ -18,6 +18,6 @@ public class UserDto {
     private String email;
 
     @NotNull
-    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$\n", message="8자리 이상의 영문과 숫자 그리고 특수문자의 조합으로 만들어주세요.")
+    @Pattern(regexp = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[@$!%*?&#])[A-Za-z\\d@$!%*?&#]{8,}$", message="8자리 이상의 영문과 숫자 그리고 특수문자의 조합으로 만들어주세요.")
     private String password;
 }
