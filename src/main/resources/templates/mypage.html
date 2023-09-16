@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>사용자 환영 메시지</title>
+</head>
+<body>
+<p th:if="${session.user != null}" th:text="${'안녕하세요, ' + session.user.name + '님!'}"></p>
+<p th:if="${session.user == null}">로그인 후 사용 가능한 기능입니다.</p>
+
+<!-- 로그아웃 버튼 -->
+<form th:if="${session.user != null}" method="post" action="/user/logout">
+  <input type="submit" value="로그아웃">
+</form>
+</body>
+</html>

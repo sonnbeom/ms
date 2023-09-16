@@ -4,6 +4,7 @@ import com.hypeboy.hypeBoard.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -12,7 +13,6 @@ public class UserRepository implements UserRepositorySecond{
 
     @Autowired
     private UserRepositorySecond userRepositorySecond;
-
 
     @Override
     public User save(User user) {
@@ -80,5 +80,9 @@ public class UserRepository implements UserRepositorySecond{
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepositorySecond.findByEmail(email);
+    }
+
+    public List<User> findByPwd(String pwd) {
+        return userRepositorySecond.findByPwd(pwd);
     }
 }
