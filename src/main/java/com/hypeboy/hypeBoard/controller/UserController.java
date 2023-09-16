@@ -10,11 +10,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/user")
 @SessionAttributes("user")
 public class UserController {
-    private UserService userService;
     @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private UserService userService;
+
+
     @PostMapping("result")
     public String createUser(@ModelAttribute UserDto userDto){
         userService.register(userDto);
