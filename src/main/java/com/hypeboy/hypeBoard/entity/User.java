@@ -5,11 +5,10 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "Users")
-@NoArgsConstructor
+
 //테이블 이름도 컬럼과 동일하게 이름을 설정해줘야 한다.
 public class User {
     @Id
@@ -37,6 +36,9 @@ public class User {
         this.name = userDto.getName();
         this.phone = userDto.getPhone();
         this.email = userDto.getEmail();
+    }
+    public User(){
+
     }
 
 

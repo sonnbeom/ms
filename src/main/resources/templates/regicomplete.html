@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입 완료</title>
-  <!-- 추가적인 스타일링을 위한 CSS 파일 링크를 여기에 추가할 수 있습니다. -->
+
   <style>
         .container {
             text-align: center;
@@ -35,13 +35,11 @@
 </head>
 <body>
 <div class="container">
-  <!-- 상단 로고 -->
+
   <h1 class="ms-logo">MS</h1>
 
-  <!-- 회원가입 완료 메시지 -->
-<!--  <p class="message" th:text="|${user.name} 님의 회원가입이 완료되었습니다.|">John님의 회원가입이 완료되었습니다.</p>-->
+  <p class="message" th:text="|${userDto.name} 님의 회원가입이 완료되었습니다.|">John님의 회원가입이 완료되었습니다.</p>
 
-  <!-- 로그인 버튼 -->
   <a class="login-button" href="/login">로그인</a>
 </div>
 </body>

@@ -15,9 +15,11 @@ public class UserService {
     public UserService(UserRepository userRepository ) {
         this.userRepository = userRepository;
     }
-    public User Registration(User user){
+    public User Registration(UserDto userDto){
+        User user = toEntity(userDto);
         duplicateIdCheck(user);
-        userRepository.save(user);
+        duplicateEmailCheck(user);
+        // insert 먼저 혹 select 먼저 작성 필요
         return user;
     }
     private void duplicateIdCheck(User user) {
@@ -26,8 +28,11 @@ public class UserService {
     }
 
     public User toEntity(UserDto userDto){
-
         return new User(userDto);
+    }
+    private void duplicateEmailCheck(User user){
+        userRepository.findByEmail(user.getEmail()).
+                ifPresent(u->{throw new IllegalStateException("중복된 이메일입니다.");});
     }
 
 }

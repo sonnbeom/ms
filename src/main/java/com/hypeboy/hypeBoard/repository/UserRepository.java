@@ -13,6 +13,7 @@ public class UserRepository implements UserRepositorySecond{
     @Autowired
     private UserRepositorySecond userRepositorySecond;
 
+
     @Override
     public User save(User user) {
         User userSaved = userRepositorySecond.save(user);
@@ -76,4 +77,8 @@ public class UserRepository implements UserRepositorySecond{
 
     }
 
+    @Override
+    public Optional<User> findByEmail(String email) {
+        return userRepositorySecond.findByEmail(email);
+    }
 }
