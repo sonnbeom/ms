@@ -1,5 +1,6 @@
 package com.hypeboy.hypeBoard.service;
 
+import com.hypeboy.hypeBoard.dto.UserDto;
 import com.hypeboy.hypeBoard.entity.User;
 import com.hypeboy.hypeBoard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,15 @@ public class UserService {
         return userRepository.findById(id).
                 orElseThrow(() -> new NoSuchElementException("아이디가 존재하지 않습니다."));
     }
+
+    public User toEntity(UserDto userDto){
+        return new User(userDto);
+    }
+    private void duplicateEmailCheck(User user){
+        userRepository.findByEmail(user.getEmail()).
+                ifPresent(u->{throw new IllegalStateException("중복된 이메일입니다.");});
+    }
+
 
     private void encryptPassword(UserDto dto) {
         dto.setPwd(passwordEncoder.encode(dto.getPwd()));
