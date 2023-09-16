@@ -1,5 +1,6 @@
 package com.hypeboy.hypeBoard.controller;
 
+import com.hypeboy.hypeBoard.dto.UserDto;
 import com.hypeboy.hypeBoard.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,10 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @GetMapping("signup")
+    public String signup(){
+        return "registration";
+    }
 
     @PostMapping("result")
     public String createUser(@ModelAttribute UserDto userDto){
