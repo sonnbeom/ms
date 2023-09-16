@@ -6,8 +6,8 @@ import com.hypeboy.hypeBoard.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -18,6 +18,7 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Transactional
     public User register(UserDto userDto){
         userDto.setPwd(passwordEncoder.encode(userDto.getPwd()));
         User user = toEntity(userDto);
