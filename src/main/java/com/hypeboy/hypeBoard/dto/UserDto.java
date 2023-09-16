@@ -1,11 +1,13 @@
 package com.hypeboy.hypeBoard.dto;
 
 
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 
 
 @ToString
+@NoArgsConstructor
 public class UserDto {
     private String id;
     private String name;
@@ -23,11 +25,6 @@ public class UserDto {
         this.id = id;
         this.pwd = pwd;
     }
-    public UserDto(){
-
-    }
-
-
     public String getId() {
         return id;
     }
