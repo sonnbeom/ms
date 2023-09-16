@@ -15,11 +15,12 @@ public class UserService {
     public UserService(UserRepository userRepository ) {
         this.userRepository = userRepository;
     }
-    public User Registration(UserDto userDto){
+    public User register(UserDto userDto){
         User user = toEntity(userDto);
         duplicateIdCheck(user);
         duplicateEmailCheck(user);
         // insert 먼저 혹 select 먼저 작성 필요
+        userRepository.save(user);
         return user;
     }
     private void duplicateIdCheck(User user) {

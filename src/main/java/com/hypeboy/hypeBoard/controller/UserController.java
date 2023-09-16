@@ -17,7 +17,7 @@ public class UserController {
     }
     @PostMapping("result")
     public String createUser(@ModelAttribute UserDto userDto){
-        userService.Registration(userDto);
+        userService.register(userDto);
         return "regicomplete";
     }
     @GetMapping("signup")
