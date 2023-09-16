@@ -3,6 +3,7 @@ package com.hypeboy.hypeBoard.controller;
 import com.hypeboy.hypeBoard.dto.UserDto;
 import com.hypeboy.hypeBoard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
 
     @PostMapping("result")
