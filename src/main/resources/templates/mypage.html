@@ -10,7 +10,7 @@
 <p th:if="${session.user == null}">로그인 후 사용 가능한 기능입니다.</p>
 
 <!-- 로그아웃 버튼 -->
-<form th:if="${session.user != null}" method="post" action="/user/logout">
+<form th:if="${session.user != null}" method="post" th:action="${T(com.hypeboy.hypeBoard.enums.EndPoint).LOGOUT.getPath()}">
   <input type="submit" value="로그아웃">
 </form>
 </body>

@@ -34,7 +34,7 @@
   <div class="login-form">
     <div class="login-box">
       <h2>Login</h2>
-      <form action="/user/myPage" method="post">
+      <form th:action="${T(com.hypeboy.hypeBoard.enums.EndPoint).LOGIN_ACTION.getPath()}" method="post">
         <label for="username">ID:</label>
         <input type="text" id="username" name="id"  required><br><br>
 

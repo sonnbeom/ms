@@ -1,5 +1,6 @@
 package com.hypeboy.hypeBoard.config;
 
+import com.hypeboy.hypeBoard.enums.EndPoint;
 import com.hypeboy.hypeBoard.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -15,27 +16,32 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 
 public class SecurityConfig {
+    private static final String SESSION_NAME = "JSESSIONID";
+    private static final String USER_ID_KEY = "id";
+    private static final String USER_PWD_KEY = "pwd";
+    private static final String[] PROTECTED_ENDPOINTS = {
+            EndPoint.Path.LOGIN_RESULT
+    };
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/user/content").authenticated()
+                        .requestMatchers(PROTECTED_ENDPOINTS).authenticated()
                         .anyRequest().permitAll()
                 )
                 .formLogin(form -> form
-                        .usernameParameter("id")
-                        .passwordParameter("pwd")
-                        .loginPage("/user/login")
-                        .loginProcessingUrl("/user/myPage")
-                        .defaultSuccessUrl("/user/content")
-                        .failureForwardUrl("/user/signup")
+                        .usernameParameter(USER_ID_KEY)
+                        .passwordParameter(USER_PWD_KEY)
+                        .loginPage(EndPoint.Path.LOGIN)
+                        .loginProcessingUrl(EndPoint.Path.LOGIN_ACTION)
+                        .defaultSuccessUrl(EndPoint.Path.LOGIN_RESULT)
                 )
                 .logout((logout) -> logout
-                        .logoutUrl("/user/logout")
-                        .logoutSuccessUrl("/user/login")
-                        .deleteCookies("JSESSIONID")
+                        .logoutUrl(EndPoint.Path.LOGOUT)
+                        .logoutSuccessUrl(EndPoint.Path.LOGIN)
+                        .deleteCookies(SESSION_NAME)
                 )
                 .build();
     }
