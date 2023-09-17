@@ -81,8 +81,4 @@ public class UserRepository implements UserRepositorySecond{
     public Optional<User> findByEmail(String email) {
         return userRepositorySecond.findByEmail(email);
     }
-
-    public List<User> findByPwd(String pwd) {
-        return userRepositorySecond.findByPwd(pwd);
-    }
 }

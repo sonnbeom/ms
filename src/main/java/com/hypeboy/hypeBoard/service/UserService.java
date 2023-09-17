@@ -19,7 +19,7 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public User register(UserDto userDto){
-        encryptPassword(userDto);
+        userDto.setPwd(passwordEncoder.encode(userDto.getPwd()));
         User user = toEntity(userDto);
         duplicateIdCheck(user);
         duplicateEmailCheck(user);
@@ -35,22 +35,14 @@ public class UserService {
 
     public User join(String id, String pwd){
         User idUser = idJoin(id);
-        List<User> pwdUser = pwdJoin(pwd);
-        for (User user :pwdUser) {
-            if (user.equals(idUser)){
-                return user;
-            }
-        } throw new NoSuchElementException("사용자를 찾을 수 없습니다.");
-    }
-  
-    public List<User> pwdJoin(String pwd){
-        List<User> pwdCheck =  userRepository.findByPwd(pwd);
-        if (pwdCheck.size()==0){
-            throw new NoSuchElementException("비밀번호가 존재하지 않습니다.");
+        boolean isPwdMatched = passwordEncoder.matches(pwd, idUser.getPwd());
+
+        if (isPwdMatched) {
+            return idUser;
         }
-        return pwdCheck;
+
+        throw new NoSuchElementException("사용자를 찾을 수 없습니다.");
     }
-  
     public User idJoin(String id){
         return userRepository.findById(id).
                 orElseThrow(() -> new NoSuchElementException("아이디가 존재하지 않습니다."));
@@ -63,12 +55,4 @@ public class UserService {
         userRepository.findByEmail(user.getEmail()).
                 ifPresent(u->{throw new IllegalStateException("중복된 이메일입니다.");});
     }
-
-
-    private void encryptPassword(UserDto dto) {
-        dto.setPwd(passwordEncoder.encode(dto.getPwd()));
-    }
-
-
-
 }

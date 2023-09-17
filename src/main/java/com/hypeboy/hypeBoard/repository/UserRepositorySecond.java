@@ -8,6 +8,5 @@ import java.util.Optional;
 
 public interface UserRepositorySecond extends CrudRepository<User, String> {
     public Optional<User> findByEmail(String email);
-    public List<User> findByPwd(String pwd);
 
 }
