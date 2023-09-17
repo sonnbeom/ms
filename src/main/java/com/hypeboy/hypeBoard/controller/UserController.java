@@ -1,9 +1,14 @@
 package com.hypeboy.hypeBoard.controller;
 
 import com.hypeboy.hypeBoard.dto.UserDto;
+import com.hypeboy.hypeBoard.entity.User;
+import com.hypeboy.hypeBoard.entity.UserDetailsCustom;
 import com.hypeboy.hypeBoard.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -29,7 +34,11 @@ public class UserController {
     }
 
     @GetMapping("/content")
-    public String contentSample() {
+    public String contentSample(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = ((UserDetailsCustom) auth.getPrincipal()).getUser();
+
+        model.addAttribute("user", user);
         return "content";
     }
 }
