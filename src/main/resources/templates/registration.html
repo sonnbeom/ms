@@ -58,10 +58,9 @@
 <body>
 <div class="container">
     <div class="ms-logo">MS</div>
-
     <div class="signup-form">
         <div class="signup-box">
-            <form action="/user/result" method="post">
+            <form th:action="${T(com.hypeboy.hypeBoard.enums.EndPoint).SIGNUP_RESULT.getPath()}" method="post">
                 <div class="form-group">
 
                     <input type="text" id="username" name="id" th:required="required" placeholder="아이디를 입력하세요">
