@@ -34,21 +34,6 @@ public class UserService {
                 ifPresent(u->{throw new IllegalStateException("이미 존재하는 회원입니다.");});
     }
 
-    public User join(String id, String pwd){
-        User idUser = idJoin(id);
-        boolean isPwdMatched = passwordEncoder.matches(pwd, idUser.getPwd());
-
-        if (isPwdMatched) {
-            return idUser;
-        }
-
-        throw new NoSuchElementException("사용자를 찾을 수 없습니다.");
-    }
-    public User idJoin(String id){
-        return userRepository.findById(id).
-                orElseThrow(() -> new NoSuchElementException("아이디가 존재하지 않습니다."));
-    }
-
     public User toEntity(UserDto userDto){
         return new User(userDto);
     }
