@@ -14,12 +14,14 @@ public class UserDto {
     private String pwd;
     private String phone;
     private String email;
-    public UserDto(String id, String name, String pwd, String phone, String email) {
+    private String nickname;
+    public UserDto(String id, String name, String pwd, String phone, String email, String nickname) {
         this.id = id;
         this.name = name;
         this.pwd = pwd;
         this.phone = phone;
         this.email = email;
+        this.nickname = nickname;
     }
     public UserDto(String id, String pwd){
         this.id = id;
@@ -63,5 +65,13 @@ public class UserDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 }

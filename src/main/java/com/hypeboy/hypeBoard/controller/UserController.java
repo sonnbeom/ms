@@ -23,6 +23,7 @@ public class UserController {
     }
 
     @PostMapping(EndPoint.Path.SIGNUP_RESULT)
+
     public String createUser(@ModelAttribute UserDto userDto) {
         userService.register(userDto);
         return "regicomplete";
