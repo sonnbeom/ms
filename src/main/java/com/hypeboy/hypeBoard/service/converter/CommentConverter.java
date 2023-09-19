@@ -15,7 +15,6 @@ public class CommentConverter {
                 .postId((long) dto.getPostId())
                 .userId(dto.getUserId())
                 .text(dto.getText())
-                .updatedAt(LocalDateTime.now())
                 .parentId(dto.getParentId() == 0 ? null : (long) dto.getParentId())
                 .build();
     }
