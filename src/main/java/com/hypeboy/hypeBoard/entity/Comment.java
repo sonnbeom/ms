@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Builder
-@Table(name = "comments")
+@Table(name = "COMMENTS")
 public class Comment {
 
     @Id
@@ -36,9 +36,9 @@ public class Comment {
     private LocalDateTime updatedAt;
 
     @Column(name = "RE_COMMENT_ID")
-    private Integer recommentId;
+    private Long recommentId;
 
-    @Column(name = "user_id", nullable = false)
+    @Column(name = "USER_ID", nullable = false)
     private String userId;
 
 }
