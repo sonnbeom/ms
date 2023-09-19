@@ -19,16 +19,16 @@ public class CommentRepositoryTests {
 
     @Test
     public void commentRepository_findByPostId_returnNull() {
-        Comment comment = Comment.builder().postId(1).text("hello test comment").userId("test1").build();
+        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
         commentRepository.save(comment);
 
-        Optional<Comment> foundComment = commentRepository.findByPostId(100);
+        Optional<Comment> foundComment = commentRepository.findByPostId(100L);
         Assertions.assertThat(foundComment.isEmpty()).isTrue();
     }
 
     @Test
     public void commentRepository_findByPostId_returnComment() {
-        Comment comment = Comment.builder().postId(1).text("hello test comment").userId("test1").build();
+        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
         commentRepository.save(comment);
 
         Optional<Comment> foundComment = commentRepository.findByPostId(comment.getPostId());
@@ -42,7 +42,7 @@ public class CommentRepositoryTests {
 
     @Test
     public void commentRepository_save_returnComment() {
-        Comment comment = Comment.builder().postId(1).text("hello test comment").userId("test1").build();
+        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
 
         Comment savedComment = commentRepository.save(comment);
 
@@ -53,7 +53,7 @@ public class CommentRepositoryTests {
     @Test
     public void commentRepository_save_throws() {
         Comment invalidComment = Comment.builder()
-                .postId(1)
+                .postId(1L)
 //                .text("ho")
                 .userId("test1")
                 .build();
