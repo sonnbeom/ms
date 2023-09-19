@@ -5,6 +5,7 @@ import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
 import com.hypeboy.hypeBoard.repository.CommentRepository;
 import com.hypeboy.hypeBoard.service.CommentService;
+import com.hypeboy.hypeBoard.service.comment.utils.CommentDummyCreator;
 import com.hypeboy.hypeBoard.service.converter.CommentConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -13,9 +14,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.time.LocalDateTime;
-
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -27,14 +25,17 @@ public class CommentServiceCreateTest {
     private CommentConverter commentConverter;
 
     @InjectMocks
+    private CommentDummyCreator commentDummyCreator;
+
+    @InjectMocks
     private CommentService commentService;
 
 
     @Test
     void createComment_Fail_with_repository() {
         String errorMsg = "Invalid Dto";
-        CommentDto reqDto = createDummyCommentDto();
-        Comment commentDummy = createDummyCommentEntity(reqDto);
+        CommentDto reqDto = commentDummyCreator.createDummyCommentDto();
+        Comment commentDummy = commentDummyCreator.createDummyCommentEntity(reqDto);
 
         when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
                 .thenReturn(commentDummy);
@@ -65,8 +66,8 @@ public class CommentServiceCreateTest {
 
     @Test
     public void createComment_Returns_SuccessResponseDto() {
-        CommentDto reqDto = createDummyCommentDto();
-        Comment commentDummy = createDummyCommentEntity(reqDto);
+        CommentDto reqDto = commentDummyCreator.createDummyCommentDto();
+        Comment commentDummy = commentDummyCreator.createDummyCommentEntity(reqDto);
 
         CommentDto resDto = CommentDto.builder()
                 .commentId(Math.toIntExact(commentDummy.getId()))
@@ -91,24 +92,5 @@ public class CommentServiceCreateTest {
         Assertions.assertThat(dto.getError()).isNull();
         Assertions.assertThat(dto.getData().getCommentId())
                 .isEqualTo(Math.toIntExact(commentDummy.getId()));
-    }
-
-    private CommentDto createDummyCommentDto() {
-        return CommentDto.builder()
-                .postId(1)
-                .userId("test1")
-                .text("This is the test comment")
-                .build();
-    }
-
-    private Comment createDummyCommentEntity(CommentDto dto) {
-        return  Comment.builder()
-                .id(1L)
-                .postId((long) dto.getPostId())
-                .userId(dto.getUserId())
-                .text(dto.getText())
-                .updatedAt(LocalDateTime.now())
-                .parentId(null)
-                .build();
     }
 }
