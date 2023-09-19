@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -15,22 +17,25 @@ import java.time.LocalDateTime;
 public class Comment {
 
     @Id
+    @Column(name = "ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @Column(name = "post_id", nullable = false)
-    private int postId;
+    @Column(name = "POST_ID", nullable = false)
+    private Long postId;
 
-    @Column(nullable = false)
+    @Column(name = "TEXT", nullable = false)
     private String text;
 
-    @Column(name = "created_at")
+    @Column(name = "CREATED_AT")
+    @CreatedDate
     private LocalDateTime createdAt;
 
-    @Column(name = "updated_at")
+    @Column(name = "UPDATED_AT")
+    @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Column(name = "recomment_id")
+    @Column(name = "RE_COMMENT_ID")
     private Integer recommentId;
 
     @Column(name = "user_id", nullable = false)
