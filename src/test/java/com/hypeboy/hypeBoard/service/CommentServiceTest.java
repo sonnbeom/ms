@@ -1,6 +1,7 @@
 package com.hypeboy.hypeBoard.service;
 
 import com.hypeboy.hypeBoard.dto.CommentDto;
+import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
 import com.hypeboy.hypeBoard.repository.CommentRepository;
 import com.hypeboy.hypeBoard.service.converter.CommentConverter;
@@ -52,16 +53,24 @@ public class CommentServiceTest {
                 .updatedAt(commentDummy.getUpdatedAt())
                 .build();
 
-        when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class))).thenReturn(commentDummy);
-        when(commentConverter.fromCommentToDto(Mockito.any(Comment.class))).thenReturn(resDto);
-        when(commentRepository.save(Mockito.any(Comment.class))).thenReturn(commentDummy);
+        when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
+                .thenReturn(commentDummy);
 
-        CommentDto dto = commentService.createComment(reqDto);
+        when(commentConverter.fromCommentToResponse(Mockito.any(Comment.class)))
+                .thenReturn(new ResponseDto<>(resDto));
 
-        Assertions.assertThat(dto.getCommentId()).isEqualTo(Math.toIntExact(commentDummy.getId()));
-        Assertions.assertThat(dto.getPostId()).isEqualTo(Math.toIntExact(commentDummy.getPostId()));
-        Assertions.assertThat(dto.getUserId()).isEqualTo(commentDummy.getUserId());
-        Assertions.assertThat(dto.getText()).isEqualTo(commentDummy.getText());
-        Assertions.assertThat(dto.getUpdatedAt()).isEqualTo(commentDummy.getUpdatedAt());
+        when(commentRepository.save(Mockito.any(Comment.class)))
+                .thenReturn(commentDummy);
+
+        ResponseDto<CommentDto> dto = commentService.createComment(reqDto);
+
+        Assertions.assertThat(dto.isOk()).isTrue();
+        Assertions.assertThat(dto.getError()).isNull();
+
+        Assertions.assertThat(dto.getData().getCommentId()).isEqualTo(Math.toIntExact(commentDummy.getId()));
+        Assertions.assertThat(dto.getData().getPostId()).isEqualTo(Math.toIntExact(commentDummy.getPostId()));
+        Assertions.assertThat(dto.getData().getUserId()).isEqualTo(commentDummy.getUserId());
+        Assertions.assertThat(dto.getData().getText()).isEqualTo(commentDummy.getText());
+        Assertions.assertThat(dto.getData().getUpdatedAt()).isEqualTo(commentDummy.getUpdatedAt());
     }
 }

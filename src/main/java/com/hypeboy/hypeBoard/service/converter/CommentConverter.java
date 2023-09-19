@@ -1,6 +1,7 @@
 package com.hypeboy.hypeBoard.service.converter;
 
 import com.hypeboy.hypeBoard.dto.CommentDto;
+import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,12 @@ public class CommentConverter {
                 .build();
     }
 
-    public CommentDto fromCommentToDto(Comment comment) {
+    public ResponseDto<CommentDto> fromCommentToResponse(Comment comment) {
+        CommentDto dto = this.fromCommentToDto(comment);
+        return new ResponseDto<>(dto);
+    }
+
+    private CommentDto fromCommentToDto(Comment comment) {
         return CommentDto.builder()
                 .commentId(Math.toIntExact(comment.getId()))
                 .postId(Math.toIntExact(comment.getPostId()))
