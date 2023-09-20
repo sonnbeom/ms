@@ -16,11 +16,16 @@ public class CommentConverter {
     }
 
     public CommentDto fromCommentToDto(Comment comment) {
+        Integer parentId = comment.getParentId() != null
+                ? Math.toIntExact(comment.getParentId())
+                : null;
+
         return CommentDto.builder()
                 .commentId(Math.toIntExact(comment.getId()))
                 .postId(Math.toIntExact(comment.getPostId()))
                 .userId(comment.getUserId())
                 .text(comment.getText())
+                .parentId(parentId)
                 .updatedAt(comment.getUpdatedAt())
                 .build();
     }
