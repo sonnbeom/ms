@@ -1,0 +1,55 @@
+package com.hypeboy.hypeBoard.controller;
+
+import com.hypeboy.hypeBoard.dto.CommentDto;
+import com.hypeboy.hypeBoard.dto.ErrorDto;
+import com.hypeboy.hypeBoard.enums.EndPoint;
+import com.hypeboy.hypeBoard.enums.ErrorCode;
+import com.hypeboy.hypeBoard.exception.CommentException;
+import com.hypeboy.hypeBoard.service.CommentService;
+import com.hypeboy.hypeBoard.service.UserService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Map;
+
+@Slf4j
+@Controller
+public class CommentController {
+
+    @Autowired
+    CommentService commentService;
+
+    @PostMapping(EndPoint.Path.COMMENT)
+    public ModelAndView createComment(@Valid CommentDto dto, BindingResult br) {
+
+        if (br.hasErrors()) {
+            ModelAndView mv = new ModelAndView(EndPoint.Path.COMMENT_FAIL);
+            ErrorDto error = makeErrorDto(ErrorCode.INVALID_USER_INPUT, br);
+
+            mv.addObject("error", error);
+            return mv;
+        }
+
+
+        CommentDto result = commentService.createComment(dto);
+        ModelAndView mv = new ModelAndView(EndPoint.Path.COMMENT_SUCCESS);
+        mv.addObject("result", result);
+        return mv;
+    }
+
+
+    private ErrorDto makeErrorDto(ErrorCode code, BindingResult bindingResult) {
+        String field = bindingResult.getFieldError().getField();
+        String message = bindingResult.getFieldError().getDefaultMessage();
+        return new ErrorDto(code, field, message);
+    }
+
+}
