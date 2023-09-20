@@ -15,14 +15,15 @@ public class CommentService {
     private CommentRepository commentRepository;
     @Autowired
     private CommentConverter commentConverter;
-    public ResponseDto<CommentDto> createComment(CommentDto dto) {
+    public CommentDto createComment(CommentDto dto) {
 
         try {
             Comment comment = commentConverter.fromDtoToComment(dto);
             Comment savedComment = commentRepository.save(comment);
-            return commentConverter.fromCommentToResponse(savedComment);
+            return commentConverter.fromCommentToDto(savedComment);
         } catch (Exception ex) {
-            return new ResponseDto<>(ex.getMessage());
+            // do sth
+            throw ex;
         }
 
     }

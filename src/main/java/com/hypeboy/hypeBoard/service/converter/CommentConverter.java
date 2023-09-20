@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 @Component
 public class CommentConverter {
     public Comment fromDtoToComment(CommentDto dto) {
-        // validation 필요
         return Comment.builder()
                 .postId((long) dto.getPostId())
                 .userId(dto.getUserId())
@@ -19,12 +18,7 @@ public class CommentConverter {
                 .build();
     }
 
-    public ResponseDto<CommentDto> fromCommentToResponse(Comment comment) {
-        CommentDto dto = this.fromCommentToDto(comment);
-        return new ResponseDto<>(dto);
-    }
-
-    private CommentDto fromCommentToDto(Comment comment) {
+    public CommentDto fromCommentToDto(Comment comment) {
         return CommentDto.builder()
                 .commentId(Math.toIntExact(comment.getId()))
                 .postId(Math.toIntExact(comment.getPostId()))

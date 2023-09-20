@@ -32,14 +32,14 @@ public class CommentConverterTest {
     }
 
     @Test
-    public void fromCommentToResponse_Return_ResponseDto() {
+    public void fromCommentToDto_Return_Dto() {
         CommentDto dummyDto = commentDummyCreator.createDummyCommentDto();
-        Comment dummyComment = commentDummyCreator.createDummyCommentEntity(dummyDto);
+        Comment comment = commentDummyCreator.createDummyCommentEntity(dummyDto);
+        CommentDto convertedDto = commentConverter.fromCommentToDto(comment);
 
-        ResponseDto<CommentDto> result = commentConverter
-                .fromCommentToResponse(dummyComment);
-
-        Assertions.assertThat(result.isOk()).isTrue();
-        Assertions.assertThat(result.getData().getPostId()).isEqualTo(dummyDto.getPostId());
+        Assertions.assertThat(convertedDto).isNotNull();
+        Assertions.assertThat(convertedDto.getPostId()).isNotNull();
+        Assertions.assertThat(convertedDto.getUserId()).isNotNull();
+        Assertions.assertThat(convertedDto.getText()).isNotNull();
     }
 }

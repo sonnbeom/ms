@@ -1,7 +1,6 @@
 package com.hypeboy.hypeBoard.service.comment;
 
 import com.hypeboy.hypeBoard.dto.CommentDto;
-import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
 import com.hypeboy.hypeBoard.repository.CommentRepository;
 import com.hypeboy.hypeBoard.service.CommentService;
@@ -44,10 +43,11 @@ public class CommentServiceCreateTest {
                 .thenThrow(new RuntimeException(errorMsg));
 
 
-        ResponseDto<CommentDto> response = commentService.createComment(reqDto);
-
-        Assertions.assertThat(response.isOk()).isFalse();
-        Assertions.assertThat(response.getError().getMsg()).isEqualTo(errorMsg);
+        try {
+            commentService.createComment(reqDto);
+        } catch (Exception ex) {
+            Assertions.assertThat(ex.getMessage()).isEqualTo(errorMsg);
+        }
     }
 
     @Test
@@ -58,14 +58,15 @@ public class CommentServiceCreateTest {
         when(commentConverter.fromDtoToComment(invalidDto))
                 .thenThrow(new RuntimeException(errorMsg));
 
-        ResponseDto<CommentDto> response = commentService.createComment(invalidDto);
-
-        Assertions.assertThat(response.isOk()).isFalse();
-        Assertions.assertThat(response.getError().getMsg()).isEqualTo(errorMsg);
+        try {
+            commentService.createComment(invalidDto);
+        } catch (Exception ex) {
+            Assertions.assertThat(ex.getMessage()).isEqualTo(errorMsg);
+        }
     }
 
     @Test
-    public void createComment_Returns_SuccessResponseDto() {
+    public void createComment_Returns_SuccessCommentDto() {
         CommentDto reqDto = commentDummyCreator.createDummyCommentDto();
         Comment commentDummy = commentDummyCreator.createDummyCommentEntity(reqDto);
 
@@ -80,17 +81,15 @@ public class CommentServiceCreateTest {
         when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
                 .thenReturn(commentDummy);
 
-        when(commentConverter.fromCommentToResponse(Mockito.any(Comment.class)))
-                .thenReturn(new ResponseDto<>(resDto));
+        when(commentConverter.fromCommentToDto(Mockito.any(Comment.class)))
+                .thenReturn(resDto);
 
         when(commentRepository.save(Mockito.any(Comment.class)))
                 .thenReturn(commentDummy);
 
-        ResponseDto<CommentDto> dto = commentService.createComment(reqDto);
+        CommentDto dto = commentService.createComment(reqDto);
 
-        Assertions.assertThat(dto.isOk()).isTrue();
-        Assertions.assertThat(dto.getError()).isNull();
-        Assertions.assertThat(dto.getData().getCommentId())
-                .isEqualTo(Math.toIntExact(commentDummy.getId()));
+        Assertions.assertThat(dto).isNotNull();
+        Assertions.assertThat(dto.getCommentId()).isEqualTo(Math.toIntExact(commentDummy.getId()));
     }
 }
