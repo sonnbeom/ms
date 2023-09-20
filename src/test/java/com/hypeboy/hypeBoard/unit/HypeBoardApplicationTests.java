@@ -1,4 +1,4 @@
-package com.hypeboy.hypeBoard;
+package com.hypeboy.hypeBoard.unit;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

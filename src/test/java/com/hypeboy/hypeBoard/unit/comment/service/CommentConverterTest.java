@@ -1,9 +1,8 @@
-package com.hypeboy.hypeBoard.service.comment;
+package com.hypeboy.hypeBoard.unit.comment.service;
 
 import com.hypeboy.hypeBoard.dto.CommentDto;
-import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
-import com.hypeboy.hypeBoard.service.comment.utils.CommentDummyCreator;
+import com.hypeboy.hypeBoard.unit.comment.utils.CommentDummyCreator;
 import com.hypeboy.hypeBoard.service.converter.CommentConverter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
