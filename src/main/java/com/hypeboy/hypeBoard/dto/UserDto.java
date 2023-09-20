@@ -1,19 +1,26 @@
 package com.hypeboy.hypeBoard.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-
 
 
 @ToString
 @NoArgsConstructor
 public class UserDto {
+
+    @NotBlank(message = "아이디는 필수 입력 값입니다.")
     private String id;
+    @NotBlank(message = "이름은 필수 입력 값입니다.")
     private String name;
+    @NotBlank(message = "비밀번호는 필수 입력 값입니다.")
     private String pwd;
+    @NotBlank(message = "핸드폰 번호 필수 입력 값입니다.")
     private String phone;
+    @NotBlank(message = "이메일은 필수 입력 값입니다.")
     private String email;
+    @NotBlank(message = "닉네임은 필수 입력 값입니다.")
     private String nickname;
     public UserDto(String id, String name, String pwd, String phone, String email, String nickname) {
         this.id = id;

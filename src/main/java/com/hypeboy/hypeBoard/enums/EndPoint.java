@@ -15,6 +15,10 @@ public enum EndPoint {
         public static final String LOGIN = "/login";
         public static final String SIGNUP_RESULT = "/signup_result";
         public static final String SIGNUP = "/signup";
+        public static final String CREATE_POST = "/create_post";
+        public static final String SESSION_CHECK = "/session_check";
+        public static final String CLICK_POST = "/post/{postId}";
+        public static final String CLICK_LIKE = "/post/{postId}/like/{userID}";
 
 
     }
