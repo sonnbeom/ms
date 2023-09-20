@@ -3,12 +3,8 @@ package com.hypeboy.hypeBoard.unit.comment.controller;
 import com.hypeboy.hypeBoard.controller.CommentController;
 import com.hypeboy.hypeBoard.dto.CommentDto;
 import com.hypeboy.hypeBoard.dto.ErrorDto;
-import com.hypeboy.hypeBoard.entity.Comment;
 import com.hypeboy.hypeBoard.enums.EndPoint;
-import com.hypeboy.hypeBoard.exception.CommentException;
-import com.hypeboy.hypeBoard.repository.CommentRepository;
 import com.hypeboy.hypeBoard.service.CommentService;
-import com.hypeboy.hypeBoard.service.converter.CommentConverter;
 import com.hypeboy.hypeBoard.unit.comment.utils.CommentDummyCreator;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,8 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Map;
 
 import static org.mockito.Mockito.when;
 

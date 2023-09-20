@@ -16,6 +16,11 @@ public enum EndPoint {
         public static final String SIGNUP_RESULT = "/signup_result";
         public static final String SIGNUP = "/signup";
 
+        public static final String COMMENT = "/comment";
+        public static final String COMMENT_FAIL = "/error";
+        public static final String COMMENT_SUCCESS = "/content";
+
+
 
     }
 

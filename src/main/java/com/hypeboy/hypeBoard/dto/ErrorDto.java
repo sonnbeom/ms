@@ -4,10 +4,11 @@ import lombok.Data;
 
 @Data
 public class ErrorDto {
-    private String code;
+    private String field;
     private String msg;
 
-    public ErrorDto(String msg) {
+    public ErrorDto(String field, String msg) {
         this.msg = msg;
+        this.field = field;
     }
 }

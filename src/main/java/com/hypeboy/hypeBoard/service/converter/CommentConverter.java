@@ -1,11 +1,8 @@
 package com.hypeboy.hypeBoard.service.converter;
 
 import com.hypeboy.hypeBoard.dto.CommentDto;
-import com.hypeboy.hypeBoard.dto.ResponseDto;
 import com.hypeboy.hypeBoard.entity.Comment;
 import org.springframework.stereotype.Component;
-
-import java.time.LocalDateTime;
 
 @Component
 public class CommentConverter {
@@ -14,7 +11,7 @@ public class CommentConverter {
                 .postId((long) dto.getPostId())
                 .userId(dto.getUserId())
                 .text(dto.getText())
-                .parentId(dto.getParentId() == 0 ? null : (long) dto.getParentId())
+                .parentId(dto.getParentId() != null ? (long) dto.getParentId() : null)
                 .build();
     }
 
