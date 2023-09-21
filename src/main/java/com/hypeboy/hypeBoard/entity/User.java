@@ -10,13 +10,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Users")
+@Table(name = "USERS")
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+
 //테이블 이름도 컬럼과 동일하게 이름을 설정해줘야 한다.
 public class User {
     @Id
-    @Column(name = "USER_ID")
+    @Column(name = "ID")
     //컬럼 네임이 테이블과 같아야 한다.
     private String id;
     @Column(name = "USER_NAME")
