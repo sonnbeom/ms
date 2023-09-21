@@ -16,18 +16,23 @@ public class CommentConverter {
     public Comment fromDtoToComment(CommentDto dto) {
         User userRef = entityManager.getReference(User.class, dto.getUserId());
         Post postRef = entityManager.getReference(Post.class, (long) dto.getPostId());
+        Comment commentRef = dto.getParentId() != null
+                ? entityManager.getReference(Comment.class, dto.getParentId())
+                : null;
 
-        return Comment.builder()
-                .post(postRef)
-                .user(userRef)
-                .text(dto.getText())
-                .parentId(dto.getParentId() != null ? (long) dto.getParentId() : null)
-                .build();
+        Comment c = new Comment();
+        c.setPost(postRef);
+        c.setUser(userRef);
+        c.setText(dto.getText());
+        c.setParent(commentRef);
+
+
+        return c;
     }
 
     public CommentDto fromCommentToDto(Comment comment) {
-        Integer parentId = comment.getParentId() != null
-                ? Math.toIntExact(comment.getParentId())
+        Integer parentId = comment.getParent() != null
+                ? Math.toIntExact(comment.getParent().getId())
                 : null;
 
         return CommentDto.builder()

@@ -1,20 +1,18 @@
 package com.hypeboy.hypeBoard.entity;
 
-import jakarta.persistence.Entity;
-
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
+@NoArgsConstructor
 @Entity
-@Builder
 @Table(name = "COMMENTS")
 public class Comment {
 
@@ -30,6 +28,17 @@ public class Comment {
     @Column(name = "TEXT", nullable = false)
     private String text;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "PARENT_ID")
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> childComments = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
+    private User user;
+
     @Column(name = "CREATED_AT")
     @CreatedDate
     private LocalDateTime createdAt;
@@ -37,12 +46,5 @@ public class Comment {
     @Column(name = "UPDATED_AT")
     @LastModifiedDate
     private LocalDateTime updatedAt;
-
-    @Column(name = "PARENT_ID")
-    private Long parentId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-    private User user;
 
 }
