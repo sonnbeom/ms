@@ -20,6 +20,11 @@ public enum EndPoint {
         public static final String CLICK_POST = "/post/{postId}";
         public static final String CLICK_LIKE = "/post/{postId}/like/{userID}";
 
+        public static final String COMMENT = "/comment";
+        public static final String COMMENT_FAIL = "/error";
+        public static final String COMMENT_SUCCESS = "/content";
+
+
 
     }
 
