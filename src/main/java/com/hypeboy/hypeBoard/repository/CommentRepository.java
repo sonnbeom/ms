@@ -8,6 +8,8 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    Optional<Comment> findByPostId(Long postId);
+
+    // suggestion: post entity의 id를 postId에서 id로 변경하는건 어떨까요?
+    Optional<Comment> findByPost_postId(Long postId);
 
 }

@@ -23,8 +23,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "POST_ID", nullable = false)
-    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "POST_ID", referencedColumnName = "ID", nullable = false)
+    private Post post;
 
     @Column(name = "TEXT", nullable = false)
     private String text;
