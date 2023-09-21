@@ -1,6 +1,7 @@
-package com.hypeboy.hypeBoard.repository;
+package com.hypeboy.hypeBoard.unit.comment.repository;
 
 import com.hypeboy.hypeBoard.entity.Comment;
+import com.hypeboy.hypeBoard.repository.CommentRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

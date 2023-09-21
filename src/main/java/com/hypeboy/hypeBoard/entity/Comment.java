@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -35,8 +37,8 @@ public class Comment {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Column(name = "RE_COMMENT_ID")
-    private Long recommentId;
+    @Column(name = "PARENT_ID")
+    private Long parentId;
 
     @Column(name = "USER_ID", nullable = false)
     private String userId;
