@@ -7,6 +7,7 @@ import com.hypeboy.hypeBoard.service.CommentService;
 import com.hypeboy.hypeBoard.unit.comment.utils.CommentDummyCreator;
 import com.hypeboy.hypeBoard.service.converter.CommentConverter;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -30,21 +31,29 @@ public class CommentServiceCreateTest {
     private CommentService commentService;
 
 
+    private CommentDto dummyDto;
+    private Comment dummyComment;
+    private CommentDto dummyResDto;
+
+    @BeforeEach
+    public void setUp() {
+        dummyDto = commentDummyCreator.createDummyCommentDto();
+        dummyComment = commentDummyCreator.createDummyCommentEntity(dummyDto);
+        dummyResDto = commentDummyCreator.createDummyCommentResDto(dummyComment);
+    }
+
     @Test
     void createComment_Fail_with_repository() {
         String errorMsg = "Invalid Dto";
-        CommentDto reqDto = commentDummyCreator.createDummyCommentDto();
-        Comment commentDummy = commentDummyCreator.createDummyCommentEntity(reqDto);
 
         when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
-                .thenReturn(commentDummy);
+                .thenReturn(dummyComment);
 
         when(commentRepository.save(Mockito.any(Comment.class)))
                 .thenThrow(new RuntimeException(errorMsg));
 
-
         try {
-            commentService.createComment(reqDto);
+            commentService.createComment(dummyDto);
         } catch (Exception ex) {
             Assertions.assertThat(ex.getMessage()).isEqualTo(errorMsg);
         }
@@ -53,13 +62,12 @@ public class CommentServiceCreateTest {
     @Test
     public void createComment_Fail_with_invalidDto() {
         String errorMsg = "Invalid Dto";
-        CommentDto invalidDto = CommentDto.builder().build();
 
-        when(commentConverter.fromDtoToComment(invalidDto))
+        when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
                 .thenThrow(new RuntimeException(errorMsg));
 
         try {
-            commentService.createComment(invalidDto);
+            commentService.createComment(dummyDto);
         } catch (Exception ex) {
             Assertions.assertThat(ex.getMessage()).isEqualTo(errorMsg);
         }
@@ -67,29 +75,18 @@ public class CommentServiceCreateTest {
 
     @Test
     public void createComment_Returns_SuccessCommentDto() {
-        CommentDto reqDto = commentDummyCreator.createDummyCommentDto();
-        Comment commentDummy = commentDummyCreator.createDummyCommentEntity(reqDto);
-
-        CommentDto resDto = CommentDto.builder()
-                .commentId(Math.toIntExact(commentDummy.getId()))
-                .postId(Math.toIntExact(commentDummy.getPostId()))
-                .userId(commentDummy.getUserId())
-                .text(commentDummy.getText())
-                .updatedAt(commentDummy.getUpdatedAt())
-                .build();
-
         when(commentConverter.fromDtoToComment(Mockito.any(CommentDto.class)))
-                .thenReturn(commentDummy);
+                .thenReturn(dummyComment);
 
         when(commentConverter.fromCommentToDto(Mockito.any(Comment.class)))
-                .thenReturn(resDto);
+                .thenReturn(dummyResDto);
 
         when(commentRepository.save(Mockito.any(Comment.class)))
-                .thenReturn(commentDummy);
+                .thenReturn(dummyComment);
 
-        CommentDto dto = commentService.createComment(reqDto);
+        CommentDto dto = commentService.createComment(dummyDto);
 
         Assertions.assertThat(dto).isNotNull();
-        Assertions.assertThat(dto.getCommentId()).isEqualTo(Math.toIntExact(commentDummy.getId()));
+        Assertions.assertThat(dto.getCommentId()).isEqualTo(Math.toIntExact(dummyComment.getId()));
     }
 }

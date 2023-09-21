@@ -1,9 +1,15 @@
 package com.hypeboy.hypeBoard.unit.comment.repository;
 
+import com.hypeboy.hypeBoard.dto.CommentDto;
 import com.hypeboy.hypeBoard.entity.Comment;
+import com.hypeboy.hypeBoard.entity.Post;
+import com.hypeboy.hypeBoard.entity.User;
 import com.hypeboy.hypeBoard.repository.CommentRepository;
+import com.hypeboy.hypeBoard.unit.comment.utils.CommentDummyCreator;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -15,57 +21,62 @@ import java.util.Optional;
 @ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class CommentRepositoryTests {
+
+    @InjectMocks
+    private CommentDummyCreator commentDummyCreator;
     @Autowired
     private CommentRepository commentRepository;
 
+    private Comment dummyComment;
+
+    @BeforeEach
+    public void setUp() {
+        CommentDto dto = commentDummyCreator.createDummyCommentDto();
+        Comment dummy = commentDummyCreator.createDummyCommentEntity(dto);
+        dummyComment = dummy;
+    }
+
     @Test
     public void commentRepository_findByPostId_returnNull() {
-        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
-        commentRepository.save(comment);
+        commentRepository.save(dummyComment);
 
-        Optional<Comment> foundComment = commentRepository.findByPostId(100L);
+        Optional<Comment> foundComment = commentRepository.findByPost_postId(100L);
         Assertions.assertThat(foundComment.isEmpty()).isTrue();
     }
 
     @Test
     public void commentRepository_findByPostId_returnComment() {
-        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
-        commentRepository.save(comment);
+        commentRepository.save(dummyComment);
 
-        Optional<Comment> foundComment = commentRepository.findByPostId(comment.getPostId());
+        Optional<Comment> foundComment = commentRepository.findByPost_postId(dummyComment.getPost().getPostId());
 
         foundComment.ifPresent((c) -> {
-            Assertions.assertThat(c.getPostId()).isEqualTo(comment.getPostId());
-            Assertions.assertThat(c.getText()).isEqualTo(comment.getText());
-            Assertions.assertThat(c.getUserId()).isEqualTo(comment.getUserId());
+            Assertions.assertThat(c.getPost().getPostId()).isEqualTo(dummyComment.getPost().getPostId());
+            Assertions.assertThat(c.getText()).isEqualTo(dummyComment.getText());
+            Assertions.assertThat(c.getUser().getId()).isEqualTo(dummyComment.getUser().getId());
         });
     }
 
-    @Test
-    public void commentRepository_save_returnComment() {
-        Comment comment = Comment.builder().postId(1L).text("hello test comment").userId("test1").build();
 
-        Comment savedComment = commentRepository.save(comment);
-
-        Assertions.assertThat(savedComment).isNotNull();
-        Assertions.assertThat(savedComment.getId()).isGreaterThan(0);
-    }
 
     @Test
     public void commentRepository_save_throws() {
-        Comment invalidComment = Comment.builder()
-                .postId(1L)
-//                .text("ho")
-                .userId("test1")
-                .build();
+        dummyComment.setText(null);
 
         Comment savedComment = null;
         try {
-             savedComment = commentRepository.save(invalidComment);
+             savedComment = commentRepository.save(dummyComment);
         } catch (Exception ex){
             Assertions.assertThat(savedComment).isNull();
         }
     }
 
+    @Test
+    public void commentRepository_save_returnComment() {
+        Comment savedComment = commentRepository.save(dummyComment);
+
+        Assertions.assertThat(savedComment).isNotNull();
+        Assertions.assertThat(savedComment.getId()).isGreaterThan(0);
+    }
 
 }
