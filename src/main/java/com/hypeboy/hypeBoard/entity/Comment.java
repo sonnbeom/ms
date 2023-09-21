@@ -40,7 +40,8 @@ public class Comment {
     @Column(name = "PARENT_ID")
     private Long parentId;
 
-    @Column(name = "USER_ID", nullable = false)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
+    private User user;
 
 }
