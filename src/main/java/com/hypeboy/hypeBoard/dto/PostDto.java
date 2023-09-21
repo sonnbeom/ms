@@ -1,14 +1,14 @@
 package com.hypeboy.hypeBoard.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
 @NoArgsConstructor
 public class PostDto {
-    @NotNull
+    @NotBlank(message = "제목은 필수 입력 값입니다.")
     private String title;
     private String textContent;
-    @NotNull
+    @NotBlank(message = "카테고리는 필수 입력 값입니다.")
     private String category;
     private String nickname;
     private String userId;

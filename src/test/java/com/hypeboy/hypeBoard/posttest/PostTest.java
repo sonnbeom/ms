@@ -2,7 +2,6 @@ package com.hypeboy.hypeBoard.posttest;
 
 import com.hypeboy.hypeBoard.dto.PostDto;
 import com.hypeboy.hypeBoard.entity.Post;
-import com.hypeboy.hypeBoard.entity.PostLike;
 import com.hypeboy.hypeBoard.entity.User;
 import com.hypeboy.hypeBoard.repository.PostRepository;
 import com.hypeboy.hypeBoard.service.PostLikeService;
@@ -49,13 +48,5 @@ public class PostTest {
         System.out.println(2);
         Assertions.assertThat(post2.getViewCount()).isEqualTo(1);
     }
-    @Test
-    public void likeCountTest(){
-        PostDto postDto1 =new PostDto("h2", "hello", "love");
-        User sonny = new User("son", "sonny", "123", "1234", "na@ver.com","beom" );
-        Post post =  postService.postRegister(postDto1, sonny);
-        PostLike postLike = postLikeService.likePost(post.getPostId(),sonny.getId());
-        Assertions.assertThat(postLike.getUserId()).isEqualTo(sonny.getId());
 
-    }
 }

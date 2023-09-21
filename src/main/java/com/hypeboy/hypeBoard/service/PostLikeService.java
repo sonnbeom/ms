@@ -14,15 +14,12 @@ public class PostLikeService {
     @Autowired
     private PostLikeRepository likeRepository;
 
-    public PostLike likePost(Long postId, String userId) {
+    public void likeDeciding(Long postId, String userId) {
         Optional<PostLike> postLike = likeRepository.findByPostIdAndUserId(postId, userId);
-        if (postLike.isEmpty()) {
-            postLike = Optional.of(new PostLike());
+        if (postLike.isPresent()){
+            likeRepository.deleteByPostIdAndUserId(postId, userId);;
+        }else {
+            likeRepository.save(new PostLike(postId, userId));
         }
-        postLike.get().setPostId(postId);
-        postLike.get().setUserId(userId);
-        likeRepository.save(postLike.get());
-        return postLike.orElseThrow();
-        //void 수정 필요
     }
 }

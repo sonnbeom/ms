@@ -38,4 +38,7 @@ public class PostLike {
     @Column(name = "UPDATED_AT")
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public PostLike(Long postId, String userId) {
+    }
 }

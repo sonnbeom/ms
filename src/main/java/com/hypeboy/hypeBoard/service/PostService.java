@@ -19,18 +19,6 @@ public class PostService {
         postRepository.save(post);
         return post;
     }
-//    public Post building(PostDto postDto){
-//        return Post.builder()
-//                .category(postDto.getCategory())
-//                .title(postDto.getTitle())
-//                .textContent(postDto.getTextContent())
-//                .userId(postDto.getUserId())
-//                .nickname(postDto.getNickname()).build();
-//    }
-    public Post postFindById(Long postId){
-        return postRepository.findById(postId)
-                .orElseThrow(()->new IllegalStateException("찾을 수 없는 포스트입니다."));
-    }
     public Post postToEntity(PostDto postDto, User user){
         postDto.setNickname(user.getNickname());
         postDto.setUserId(user.getId());
