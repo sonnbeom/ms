@@ -18,10 +18,14 @@ public class CommentService {
     private CommentConverter commentConverter;
 
     public CommentDto createComment(CommentDto dto) {
-        Comment comment = commentConverter.fromDtoToComment(dto);
-        Comment savedComment = commentRepository.save(comment);
-        CommentDto result = commentConverter.fromCommentToDto(savedComment);
-
-        return result;
+        try {
+            Comment comment = commentConverter.fromDtoToComment(dto);
+            Comment savedComment = commentRepository.save(comment);
+            CommentDto result = commentConverter.fromCommentToDto(savedComment);
+            return result;
+        } catch (Exception ex) {
+            log.error("createComment exception: >> " + ex);
+            throw ex;
+        }
     }
 }
