@@ -1,15 +1,21 @@
 package com.hypeboy.hypeBoard.repository;
 
 import com.hypeboy.hypeBoard.entity.Comment;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository {
+    Optional<Comment> findById(int commentId) throws Exception;
+    List<Comment> findByPostId(int postId, int lastId, int limit) throws Exception;
+    boolean insert(Comment comment) throws SQLException;
 
-    // suggestion: post entity의 id를 postId에서 id로 변경하는건 어떨까요?
-    Optional<Comment> findByPost_postId(Long postId);
+    boolean update(Comment comment) throws SQLException;
 
+    boolean updateStatusReadyToDeleteById(int commentId) throws Exception;
+
+    boolean updateStatusReadyToDeleteByPostId(int commentId) throws Exception;
+
+    boolean deletePermanently() throws Exception;
 }

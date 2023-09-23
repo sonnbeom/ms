@@ -14,18 +14,11 @@ import org.springframework.stereotype.Service;
 public class CommentService {
     @Autowired
     private CommentRepository commentRepository;
+
     @Autowired
     private CommentConverter commentConverter;
 
     public CommentDto createComment(CommentDto dto) {
-        try {
-            Comment comment = commentConverter.fromDtoToComment(dto);
-            Comment savedComment = commentRepository.save(comment);
-            CommentDto result = commentConverter.fromCommentToDto(savedComment);
-            return result;
-        } catch (Exception ex) {
-            log.error("createComment exception: >> " + ex);
-            throw ex;
-        }
+        return null;
     }
 }
