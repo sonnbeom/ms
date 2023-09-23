@@ -2,7 +2,6 @@ package com.hypeboy.hypeBoard.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hypeboy.hypeBoard.enums.EndPoint;
-import com.hypeboy.hypeBoard.unit.comment.utils.CommentDummyCreator;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -25,9 +24,6 @@ public class CommentControllerTest {
     private ObjectMapper objectMapper;
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private CommentDummyCreator commentDummyCreator;
 
     @Test
 
