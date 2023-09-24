@@ -18,4 +18,8 @@ public interface CommentRepository {
     boolean updateStatusReadyToDeleteByPostId(int commentId) throws Exception;
 
     boolean deletePermanently() throws Exception;
+
+    boolean markDelete(int commentId) throws SQLException;
+
+    public boolean deletePermanentlyByPostId(int postId) throws Exception;
 }

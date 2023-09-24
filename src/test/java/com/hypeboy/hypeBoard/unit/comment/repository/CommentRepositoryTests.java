@@ -30,7 +30,7 @@ public class CommentRepositoryTests {
     private Comment invalidComment;
 
     private void createDummyComment() throws Exception {
-        int existCommentId = 1;
+        int existCommentId = 8;
         int existPostId = 1;
         String existUserId = "test1";
         String sampleText = "updated sample text";
@@ -57,6 +57,29 @@ public class CommentRepositoryTests {
     public void test() {
         Assertions.assertThat(true).isTrue();
     }
+
+
+    @Test
+    public void markDelete_Return_Fail() throws Exception {
+        int notMatchedId = validComment.getId() + 10000;
+        boolean isSuccess = commentRepository.markDelete(notMatchedId);
+        Assertions.assertThat(isSuccess).isFalse();
+    }
+
+    @Test
+    public void markDelete_Return_Success() throws Exception {
+        int validCommentId = validComment.getId();
+        boolean isSuccess = commentRepository.markDelete(validCommentId);
+        Assertions.assertThat(isSuccess).isTrue();
+    }
+
+    @Test
+    public void deletePermanentlyByPostId_Return_Success() throws Exception {
+        int validPostId = validComment.getPostId();
+        boolean isSuccess = commentRepository.deletePermanentlyByPostId(validPostId);
+        Assertions.assertThat(isSuccess).isTrue();
+    }
+
 
 
     @Test

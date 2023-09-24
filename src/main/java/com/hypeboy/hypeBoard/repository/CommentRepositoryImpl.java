@@ -112,6 +112,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         return result > 0;
     }
 
+    // TODO - Delete when next pr merged
     @Override
     public boolean updateStatusReadyToDeleteById(int commentId) throws Exception {
         String selectChildrenQuery = "select ID from COMMENTS where PARENT_ID = ?";
@@ -154,6 +155,7 @@ public class CommentRepositoryImpl implements CommentRepository {
         return result > 0;
     }
 
+    // TODO - Delete when next pr merged
     @Override
     public boolean updateStatusReadyToDeleteByPostId(int postId) throws SQLException {
         String sql = "update COMMENTS SET STATUS = 'deleted' where POST_ID = ?";
@@ -177,6 +179,37 @@ public class CommentRepositoryImpl implements CommentRepository {
         try (Connection conn = dataSource.getConnection()) {
             try (PreparedStatement deleteStatement = conn.prepareStatement(deleteQuery)) {
                 result = deleteStatement.executeUpdate();
+            }
+        }
+
+        return result > 0;
+    }
+
+
+    @Override
+    public boolean deletePermanentlyByPostId(int postId) throws Exception {
+        String deleteQuery ="delete from COMMENTS where POST_ID = ?";
+        int result = 0;
+
+        try (Connection conn = dataSource.getConnection()) {
+            try (PreparedStatement deleteStatement = conn.prepareStatement(deleteQuery)) {
+                deleteStatement.setInt(1, postId);
+                result = deleteStatement.executeUpdate();
+            }
+        }
+
+        return result > 0;
+    }
+
+    @Override
+    public boolean markDelete(int commentId) throws SQLException {
+        String sql = "update COMMENTS SET STATUS = 'deleted' where ID = ?";
+        int result = 0;
+
+        try (Connection conn = dataSource.getConnection()) {
+            try (PreparedStatement statement = conn.prepareStatement(sql)) {
+                statement.setInt(1, commentId);
+                result = statement.executeUpdate();
             }
         }
 
