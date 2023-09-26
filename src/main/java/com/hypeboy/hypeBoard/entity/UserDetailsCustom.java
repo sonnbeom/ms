@@ -23,6 +23,12 @@ public class UserDetailsCustom implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Arrays.asList(new SimpleGrantedAuthority(UserRole.ROLE_USER.getValue()));
     }
+    public String getId() {
+        return user.getId();
+    }
+    public String getNickname(){
+        return user.getNickname();
+    }
 
     @Override
     public String getPassword() {
@@ -31,7 +37,7 @@ public class UserDetailsCustom implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getId();
+        return user.getNickname();
     }
 
     @Override

@@ -1,19 +1,18 @@
 package com.hypeboy.hypeBoard.controller;
 
 import com.hypeboy.hypeBoard.dto.PostDto;
-import com.hypeboy.hypeBoard.entity.User;
+import com.hypeboy.hypeBoard.entity.UserDetailsCustom;
 import com.hypeboy.hypeBoard.enums.EndPoint;
-import com.hypeboy.hypeBoard.service.PostLikeService;
+import com.hypeboy.hypeBoard.page.Page;
 import com.hypeboy.hypeBoard.service.PostService;
-import com.hypeboy.hypeBoard.service.ViewCounterService;
-import com.hypeboy.hypeBoard.sessioncheck.SessionCheckHandler;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.sql.SQLException;
 
 //@Controller
 @RestController
@@ -22,29 +21,34 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private SessionCheckHandler sessionCheck;
-
-    @Autowired
-    private ViewCounterService counterService;
-    @Autowired
-    private PostLikeService postLikeService;
-
     @PostMapping(EndPoint.Path.CREATE_POST)
-    public String createPost(@Valid PostDto postDto){
-        Authentication auth = sessionCheck.getAuthentication();
-        User user = (User) auth.getPrincipal();
-        postService.postRegister(postDto,user);
+    public String createPost(@Valid PostDto postDto, @AuthenticationPrincipal UserDetailsCustom user) throws SQLException {
+        postService.postRegister(postDto,user.getId(),user.getNickname());
         return "postComplete";
     }
-    @PostMapping(EndPoint.Path.CLICK_POST)
-    public String viewCount(@PathVariable Long postId){
-        counterService.increaseViewCount(postId);
+
+    @PostMapping(EndPoint.Path.READ_BY_NICKNAME)
+    public String readPostByNickname(@Valid String nickname, @PathVariable int currentPage, Model model){
+        Page<PostDto> page = postService.createPageByNickName(nickname,currentPage+1);
+        model.addAttribute("page",page);
         return "";
     }
-    @PostMapping(EndPoint.Path.CLICK_LIKE)
-    public String likeCount(@PathVariable Long postId, @PathVariable String userID){
-        postLikeService.likeDeciding(postId,userID);
+    @PostMapping(EndPoint.Path.READ_BY_ID)
+    public String readPostById(@Valid String id, @PathVariable int currentPage, Model model){
+        Page<PostDto> page = postService.createPageById(id,currentPage+1);
+        model.addAttribute("page",page);
+        return "";
+    }
+
+    @GetMapping(EndPoint.Path.UPDATE)
+    public String updateMyPost(@RequestBody PostDto postDto, @PathVariable String id, @PathVariable int postId){
+        postService.updatePost(postDto, id, postId);
+        return "";
+    }
+
+    @GetMapping(EndPoint.Path.DELETE)
+    public String deleteMyPost(@PathVariable String id, @PathVariable int postId) throws SQLException {
+        postService.delete(id, postId);
         return "";
     }
 }
