@@ -1,8 +1,5 @@
 package com.hypeboy.hypeBoard.connectionpool;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.jdbc.DataSourceBuilder;
-
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,22 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ConnectionPool {
-    @Autowired
-    private static ConnectionPool instance;
-    @Autowired
+
     private final DataSource dataSource;
 
     public ConnectionPool(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
-    public static ConnectionPool getInstance() {
-        if (instance == null) {
-            instance = new ConnectionPool(DataSourceBuilder.create().build());
-        }
-        return instance;
-    }
-
     public Connection getConnection() throws SQLException {
         return dataSource.getConnection();
     }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,15 +17,13 @@ import java.util.List;
 @Repository
 public class PostRepository implements MemoryPostRepository {
 
-    @Autowired
-    private DataSource dataSource;
-    @Autowired
-    private ConnectionPool connPool = ConnectionPool.getInstance();
+    private final ConnectionPool connPool;
 
-
-    public PostRepository(DataSource dataSource) {
-        this.dataSource = dataSource;
+    @Autowired
+    public PostRepository(ConnectionPool coonPool) {
+        this.connPool = coonPool;
     }
+
     private String readSqlByNickname = "SELECT * FROM posts WHERE nickname = ?";
     private String readSqlById = "SELECT * FROM posts WHERE USERID = ?";
     private String deleteSql = "DELETE FROM POSTS WHERE ID = ? AND USERID = ?";
@@ -38,6 +35,7 @@ public class PostRepository implements MemoryPostRepository {
 
     @Value("${spring.datasource.password}")
     private String password;
+
     @Override
     public void save(Post post) throws SQLException {
         PreparedStatement stmt = null;
@@ -49,30 +47,33 @@ public class PostRepository implements MemoryPostRepository {
             stmt.setString(3, post.getNickname());
             stmt.setString(4, post.getTextContent());
             stmt.setString(5, post.getCategory());
-            stmt.setString(6,null);
+            stmt.setString(6, null);
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw e;
         } finally {
-            connPool.close(conn,stmt);
+            connPool.close(conn, stmt);
         }
     }
+
     @Override
     public void deletePost(String id, int postId) throws SQLException {
         PreparedStatement stmt = null;
-        Connection conn = connPool.getConnection();;
+        Connection conn = connPool.getConnection();
+        ;
         try {
             stmt = conn.prepareStatement(deleteSql);
             stmt.setInt(1, postId);
             stmt.setString(2, id);
             stmt.executeUpdate();
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.getErrorCode();
-        }finally {
-            connPool.close(conn,stmt);
+        } finally {
+            connPool.close(conn, stmt);
 
         }
     }
+
     public List<PostDto> readPost(String parameter, String sql) {
         PreparedStatement stmt = null;
         Connection conn = null;
@@ -81,9 +82,9 @@ public class PostRepository implements MemoryPostRepository {
         try {
             conn = connPool.getConnection();
             stmt = conn.prepareStatement(sql);
-            stmt.setString(1,parameter);
+            stmt.setString(1, parameter);
             result = stmt.executeQuery();
-            while (result.next()){
+            while (result.next()) {
                 PostDto postDto = new PostDto();
                 postDto.setTitle(result.getString("title"));
                 postDto.setNickname(result.getString("nickname"));
@@ -92,63 +93,72 @@ public class PostRepository implements MemoryPostRepository {
                 postDtos.add(postDto);
 
             }
-        }catch (SQLException e){
+        } catch (SQLException e) {
             e.getMessage();
-        }
-        finally {
+        } finally {
             connPool.redaClose(conn, stmt, result);
         }
         return postDtos;
     }
-    public List<PostDto> findByNickname(String nickname, int contentCount){
+
+    public List<PostDto> findByNickname(String nickname, int contentCount) {
         return readPost(nickname, readSqlByNickname);
     }
+
     @Override
     public List<PostDto> findById(String id, int contentCount) {
         return readPost(id, readSqlById);
     }
+
     public void updatePost(PostDto postDto, String id, int postId) {
-        String sql = "UPDATE posts SET";
-        boolean updateOrNot = false;
         PreparedStatement stmt = null;
         Connection conn = null;
+        String sql = buildUpdateQuery(postDto,id,postId);
 
-        if (postDto.getTitle()!=null){
-            sql += " title = ?,";
-            updateOrNot = true;
-        }
-        if(postDto.getCategory()!=null){
-            sql += " category = ?,";
-            updateOrNot = true;
-        }
-        if (postDto.getTextContent()!=null){
-            sql += " textcontent = ?,";
-            updateOrNot = true;
-        }
-
-        if (updateOrNot){
-        sql = sql.substring(0, sql.length()-1);
-        sql += "where userid = ? and Id = ?";
-        try {conn = connPool.getConnection();
+        try {
+            conn = connPool.getConnection();
             stmt = conn.prepareStatement(sql);
-            int index = 1;
-            if (postDto.getTitle()!=null){
-                stmt.setString(index++, postDto.getTitle());
-            }if (postDto.getCategory()!=null){
-                stmt.setString(index++, postDto.getCategory());
-            }if (postDto.getTextContent()!=null){
-                stmt.setString(index++, postDto.getTextContent());
-            }
-            stmt.setString(index++, id);
-            stmt.setInt(index, postId);
+            setStmt(stmt, postDto, id, postId);
             stmt.executeUpdate();
 
-        }catch (SQLException e){
-            e.getErrorCode();
-        }finally {
-            connPool.close(conn, stmt);
-         }
+            } catch (SQLException e) {
+                e.getErrorCode();
+            } finally {
+                connPool.close(conn, stmt);
+                }
+    }
+    private String buildUpdateQuery(PostDto postDto, String id, int postId) {
+        String sql = "UPDATE posts SET";
+        boolean updateOrNot = false;
+
+        if (postDto.getTitle() != null) {
+            sql += " title = ?,";
+            updateOrNot = true;
+        }if (postDto.getCategory() != null) {
+            sql += " category = ?,";
+            updateOrNot = true;
+        }if (postDto.getTextContent() != null) {
+            sql += " textcontent = ?,";
+            updateOrNot = true;
+        }if (updateOrNot) {
+            sql = sql.substring(0, sql.length() - 1); // Remove the trailing comma and space.
+            sql += " where userid = ? and Id = ?";
         }
+        return sql;
+    }
+    public void setStmt(PreparedStatement stmt, PostDto postDto, String id, int postId) throws SQLException {
+        int index = 1;
+        if (postDto.getTitle() != null) {
+            stmt.setString(index++, postDto.getTitle());
+        }
+        if (postDto.getCategory() != null) {
+            stmt.setString(index++, postDto.getCategory());
+        }
+        if (postDto.getTextContent() != null) {
+            stmt.setString(index++, postDto.getTextContent());
+        }
+        stmt.setString(index++, id);
+        stmt.setInt(index, postId);
     }
 }
 
