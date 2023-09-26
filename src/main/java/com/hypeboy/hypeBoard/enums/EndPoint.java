@@ -16,10 +16,11 @@ public enum EndPoint {
         public static final String SIGNUP_RESULT = "/signup_result";
         public static final String SIGNUP = "/signup";
         public static final String CREATE_POST = "/create_post";
-        public static final String SESSION_CHECK = "/session_check";
-        public static final String CLICK_POST = "/post/{postId}";
-        public static final String CLICK_LIKE = "/post/{postId}/like/{userID}";
 
+        public static final String READ_BY_NICKNAME = "/post/user/{nickname}/page/{currentPage}";
+        public static final String READ_BY_ID = "/user/{userid}/";
+        public static final String UPDATE = "/user/{userid}/post/{postId}";
+        public static final String DELETE = "delete/user/{userid}/post/{postId}";
         public static final String COMMENT = "/comment";
         public static final String COMMENT_FAIL = "/error";
         public static final String COMMENT_SUCCESS = "/content";

@@ -1,3 +1,4 @@
+
 use ms_test;
 
 BEGIN;
@@ -25,3 +26,4 @@ VALUES (1, 'This is a sample comment.', 'active', CURRENT_TIMESTAMP, CURRENT_TIM
 
 
 COMMIT;
+
