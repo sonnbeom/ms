@@ -7,10 +7,9 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Builder
+
 @NoArgsConstructor
 @Getter
-@Setter
 @ToString
 public class Post {
 
@@ -54,9 +53,6 @@ public class Post {
         this.nickname = postDto.getNickname();
         this.userId = postDto.getUserId();
     }
-//    public Post() {
-//        this.createdAt = LocalDateTime.now();
-//        this.updatedAt = LocalDateTime.now();
-//    }
+
 
 }
