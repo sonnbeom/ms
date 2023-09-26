@@ -1,50 +1,31 @@
 package com.hypeboy.hypeBoard.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
-@NoArgsConstructor
-@Entity
-@Table(name = "COMMENTS")
+@RequiredArgsConstructor
 public class Comment {
+    private Integer id;
 
-    @Id
-    @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final Integer postId;
+    private final String userId;
+    private final String text;
+    private CommentStatus status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "POST_ID", referencedColumnName = "ID", nullable = false)
-    private Post post;
-
-    @Column(name = "TEXT", nullable = false)
-    private String text;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "PARENT_ID")
-    private Comment parent;
-
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comment> childComments = new ArrayList<>();
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID", nullable = false)
-    private User user;
-
-    @Column(name = "CREATED_AT")
-    @CreatedDate
+    private Integer parentId;
     private LocalDateTime createdAt;
-
-    @Column(name = "UPDATED_AT")
-    @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    public Comment(Integer id, Integer postId, String userId, String text, Integer parentId, CommentStatus status) {
+        this.id = id;
+        this.postId = postId;
+        this.userId = userId;
+        this.text = text;
+        this.parentId = parentId;
+        this.status = status;
+    }
 
 }
