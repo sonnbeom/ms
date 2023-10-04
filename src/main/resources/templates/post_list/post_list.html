@@ -67,14 +67,16 @@
 
     <!-- Posts List -->
     <div th:each="post : ${post}">
-        <div class="post-item">
-            <div th:text="${post.id}"></div>
-            <div th:text="${post.userId}"></div>
-            <div th:text="${post.title}"></div>
-            <div th:text="${post.nickname}"></div>
-            <div th:text="${post.textContent}"></div>
-            <div th:text="${post.category}"></div>
-        </div>
+        <a th:href="@{/post/{id}(id=${post.id})}">
+            <div class="post-item">
+                <div th:text="${post.id}"></div>
+                <div th:text="${post.userId}"></div>
+                <div th:text="${post.title}"></div>
+                <div th:text="${post.nickname}"></div>
+                <div th:text="${post.textContent}"></div>
+                <div th:text="${post.category}"></div>
+            </div>
+        </a>
     </div>
 
     <div>
