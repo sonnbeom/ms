@@ -1,9 +1,11 @@
 package com.hypeboy.hypeBoard.controller;
 
 import com.hypeboy.hypeBoard.dto.PostDto;
+import com.hypeboy.hypeBoard.dto.PostListDto;
 import com.hypeboy.hypeBoard.enums.EndPoint;
 import com.hypeboy.hypeBoard.page.Page;
 import com.hypeboy.hypeBoard.service.PostService;
+import com.hypeboy.hypeBoard.entity.Post;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +15,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
+import java.util.List;
 
-//@Controller
 @Controller
 @Log4j2
 public class PostController {
@@ -45,6 +47,7 @@ public class PostController {
         postService.delete(id, postId);
         return "";
     }
+
     @PostMapping(EndPoint.Path.CREATE_POST)
     public String createPost(@Valid @ModelAttribute PostDto postDto, BindingResult bindingResult, @RequestParam("id")String id, @RequestParam("nickname")String nickname) throws SQLException {
         if (bindingResult.hasErrors()){
@@ -57,4 +60,17 @@ public class PostController {
     public String createPostPage(){
         return "create_post";
     }
+    @GetMapping(EndPoint.Path.POST_LIST)
+    public String getPostList(@ModelAttribute("post") PostListDto dto, Model model) {
+        PostListDto validDto = dto.getPage() != null ? dto : PostListDto.getDefaultInstance();
+
+        List<Post> post = postService.getPostList(validDto);
+        Integer count = postService.getPostListCount();
+
+        model.addAttribute("post", post);
+        model.addAttribute("count", count);
+
+        return "post_list/post_list.html";
+    }
+
 }
