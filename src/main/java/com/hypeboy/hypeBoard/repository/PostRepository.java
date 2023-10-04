@@ -3,6 +3,7 @@ package com.hypeboy.hypeBoard.repository;
 import com.hypeboy.hypeBoard.connectionpool.ConnectionPool;
 import com.hypeboy.hypeBoard.dto.PostDto;
 import com.hypeboy.hypeBoard.entity.Post;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
@@ -11,9 +12,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
+@Log4j2
 @Repository
 public class PostRepository implements MemoryPostRepository {
 
@@ -159,6 +163,77 @@ public class PostRepository implements MemoryPostRepository {
         }
         stmt.setString(index++, id);
         stmt.setInt(index, postId);
+    }
+
+    public Integer count () {
+        String countQuery = "select count(*) from posts";
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conn = null;
+
+        Integer count = null;
+
+        try {
+            conn = connPool.getConnection();
+            stmt = conn.prepareStatement(countQuery);
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception ex) {
+            log.error("error: >> " + ex.getMessage());
+        } finally {
+            connPool.safeClose(conn, stmt, rs);
+        }
+
+        return count;
+    }
+
+    public List<Post> findAll(Integer offset, Integer limit) {
+        String findAllQuery = "select * from posts "
+                + "order by ID desc "
+                + " limit ? "
+                + " offset ?";
+
+        ResultSet rs = null;
+        PreparedStatement stmt = null;
+        Connection conn = null;
+
+        List<Post> postList = new LinkedList<>();
+
+        try {
+            conn = connPool.getConnection();
+            stmt = conn.prepareStatement(findAllQuery);
+            stmt.setInt(1, limit);
+            stmt.setInt(2, offset);
+
+            rs = stmt.executeQuery();
+
+            while(rs.next()) {
+                LocalDateTime createdAt = rs.getTimestamp("created_at").toLocalDateTime();
+                LocalDateTime updatedAt = rs.getTimestamp("updated_at").toLocalDateTime();
+                Post post = new Post(
+                        rs.getInt("id"),
+                        rs.getString("userId"),
+                        rs.getString("title"),
+                        rs.getString("nickname"),
+                        rs.getString("textContent"),
+                        rs.getString("category"),
+                        rs.getInt("referencedId"),
+                        createdAt,
+                        updatedAt
+                );
+
+                postList.add(post);
+            }
+
+        } catch (Exception ex) {
+            log.error("error: >> " + ex.getMessage());
+        } finally {
+            connPool.safeClose(conn, stmt, rs);
+        }
+
+        return postList;
     }
 }
 

@@ -25,6 +25,8 @@ public enum EndPoint {
         public static final String COMMENT_FAIL = "/error";
         public static final String COMMENT_SUCCESS = "/content";
 
+        public static final String POST_LIST = "/posts";
+
 
 
     }

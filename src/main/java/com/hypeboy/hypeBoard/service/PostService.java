@@ -1,6 +1,7 @@
 package com.hypeboy.hypeBoard.service;
 
 import com.hypeboy.hypeBoard.dto.PostDto;
+import com.hypeboy.hypeBoard.dto.PostListDto;
 import com.hypeboy.hypeBoard.entity.Post;
 import com.hypeboy.hypeBoard.page.Page;
 import com.hypeboy.hypeBoard.repository.PostRepository;
@@ -56,5 +57,19 @@ public class PostService {
 
     public void delete(String id, int postId) throws SQLException {
         postRepository.deletePost(id,postId);
+    }
+
+    public List<Post> getPostList(PostListDto dto) {
+        Integer limit = dto.getLimit();
+        Integer offset = (dto.getPage() - 1) * limit;
+
+        List<Post> postList = postRepository.findAll(offset, limit);
+
+        return postList;
+    }
+
+    public Integer getPostListCount() {
+        Integer count = postRepository.count();
+        return count;
     }
 }
