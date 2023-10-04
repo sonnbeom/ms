@@ -12,7 +12,8 @@ import javax.sql.DataSource;
 @Configuration
 public class AppConfig {
 
-    private String dataSourceUrl = "";
+    @Value("${spring.datasource.url}")
+    private String dataSourceUrl;
     @Value("${spring.datasource.password}")
     private String password;
     @Bean

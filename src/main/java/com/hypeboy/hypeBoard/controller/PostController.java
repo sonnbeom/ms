@@ -1,14 +1,12 @@
 package com.hypeboy.hypeBoard.controller;
 
 import com.hypeboy.hypeBoard.dto.PostDto;
-import com.hypeboy.hypeBoard.entity.UserDetailsCustom;
 import com.hypeboy.hypeBoard.enums.EndPoint;
 import com.hypeboy.hypeBoard.page.Page;
 import com.hypeboy.hypeBoard.service.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +20,8 @@ public class PostController {
     private PostService postService;
 
     @PostMapping(EndPoint.Path.CREATE_POST)
-    public String createPost(@Valid PostDto postDto, @AuthenticationPrincipal UserDetailsCustom user) throws SQLException {
-        postService.postRegister(postDto,user.getId(),user.getNickname());
+    public String createPost(@Valid PostDto postDto) throws SQLException {
+
         return "postComplete";
     }
 
